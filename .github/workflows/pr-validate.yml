@@ -1,0 +1,53 @@
+name: "Validate PR"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # ====================================================================
+  # C# tests
+  # ====================================================================
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: setup
+        uses: ./.github/actions/dotnet-setup
+        name: setup and configure dotnet
+        with:
+          dotnet-versions: 8.x
+
+      - name: Restore NuGet packages
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore
+
+      - name: Run unit tests
+        run: dotnet test src/unit-tests/unit-tests.csproj
+          --no-build
+          --logger "trx;LogFileName=unit-tests.trx"
+
+      - name: Run integration tests
+        env:
+          ApiBaseUrl: http://localhost:5000
+          UseFakeAuth: true
+        run: dotnet test src/integration-tests/integration-tests.csproj
+          --no-restore
+          --logger "trx;LogFileName=integration-tests.trx"
+
+      - name: Publish Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/*.trx'
