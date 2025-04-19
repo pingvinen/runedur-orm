@@ -1,0 +1,62 @@
+name: "Create new version"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  new-version:
+    runs-on: ubuntu-latest
+    outputs:
+      new-release-version: ${{ steps.semantic.outputs.new_release_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - id: setup
+        uses: ./.github/actions/dotnet-setup
+        name: setup and configure dotnet
+        with:
+          dotnet-versions: 8.x
+      
+      - id: dotnet-version
+        name: Install dotnet version
+        shell: bash
+        run: |
+          dotnet tool install --global dotnet-version-cli --version 3.0.3
+      
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          extra_plugins: |
+            @semantic-release/exec
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  publish-nuget-package:
+    runs-on: ubuntu-latest
+    needs: [ new-version ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: setup
+        uses: ./.github/actions/dotnet-setup@v2
+        name: setup and configure dotnet
+        with:
+          dotnet-versions: 8.x
+
+      - uses: ./.github/actions/dotnet-nuget
+        name: Publish nuget package
+        with:
+          target-dir: src/generator
+          set-new-version: ${{ needs.new-version.outputs.new-release-version }}
+          do-push: false # let's first see if this works
+          nuget-feed-access-token: "wait-for-it" # ${{ secrets.PACKAGE_PUSH_TOKEN }}
+          nuget-feed-uri: ""
