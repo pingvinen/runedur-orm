@@ -1,0 +1,40 @@
+name: pr-lint
+description: Lint the PR according to our rules
+
+inputs:
+  github-token:
+    description: "Github token from the workflow"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Lint PR title
+      id: lint-pr-title
+      uses: ./.github/actions/pr-lint/title
+    
+    # Report on the error of the preceding step
+    - if: always() && (steps.lint-pr-title.outputs.error_message != null)
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        header: pr-title-lint-error
+        message: |
+          The PR title must follow the [Conventional Commits specification(https://www.conventionalcommits.org/en/v1.0.0/) and this PR does not 😔
+          
+          A few examples:
+            feat(gh-123): heroic feature added
+            fix(GH-653): santa's junk
+          
+          Details from the linter:
+          ```
+          ${{ steps.lint-pr-title.outputs.error_message }}
+          ```
+
+    # Delete previous PR comment when the linter is happy
+    - if: ${{ steps.lint-pr-title.outputs.error_message == null }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        header: pr-title-lint-error
+        delete: true
