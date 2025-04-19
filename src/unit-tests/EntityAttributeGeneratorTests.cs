@@ -24,7 +24,7 @@ namespace Runedur
     /// Marks a class as an entity that Runedur should
     /// consider during code generation
     /// </summary>
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(""Runedur.Generator"", ""{version}"")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(""Runedur"", ""{version}"")]
     [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = false)]
     internal sealed class RunedurEntityAttribute : global::System.Attribute
     {{
