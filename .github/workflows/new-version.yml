@@ -57,4 +57,4 @@ jobs:
         with:
           target-dir: src/generator
           do-push: false # let's first see if this works
-          nuget-feed-access-token: "wait-for-it" # ${{ secrets.PACKAGE_PUSH_TOKEN }}
+          nuget-feed-access-token: ${{ secrets.NUGET_API_KEY }}
