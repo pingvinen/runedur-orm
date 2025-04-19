@@ -12,6 +12,8 @@ runs:
     - name: Lint PR title
       id: lint-pr-title
       uses: ./.github/actions/pr-lint/title
+      with:
+        github-token: ${{ inputs.github-token }}
     
     # Report on the error of the preceding step
     - if: always() && (steps.lint-pr-title.outputs.error_message != null)
