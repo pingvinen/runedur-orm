@@ -37,7 +37,7 @@ jobs:
           extra_plugins: |
             @semantic-release/exec
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_PAT }}
 
   publish-nuget-package:
     runs-on: ubuntu-latest
@@ -56,7 +56,5 @@ jobs:
         name: Publish nuget package
         with:
           target-dir: src/generator
-          set-new-version: ${{ needs.new-version.outputs.new-release-version }}
           do-push: false # let's first see if this works
           nuget-feed-access-token: "wait-for-it" # ${{ secrets.PACKAGE_PUSH_TOKEN }}
-          nuget-feed-uri: ""
