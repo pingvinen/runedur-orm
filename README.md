@@ -1,4 +1,4 @@
-# 🪓 Runedur
+# ⚒️ Runedur
 
 **A build-time ORM that inscribes native C# code — like you'd write it yourself. Only better.**
 
@@ -87,7 +87,7 @@ For now, to test locally:
 Runedur is more than a utility — it is an ethos: **build tools that vanish at runtime, but leave behind code as strong as dwarven steel.**  
 You may never see the smith again… but you’ll wield his work.
 
-[Read the legend →](docs/lore.md)
+[Read the legend →](lore.md)
 
 
 
