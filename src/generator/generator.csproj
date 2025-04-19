@@ -11,13 +11,18 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <AssemblyName>Runedur.Generator</AssemblyName>
+    <AssemblyName>Runedur</AssemblyName>
     <PackageId>Runedur</PackageId>
     <IsPackable>true</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IsRoslynComponent>true</IsRoslynComponent>
+    <Title>Runedur</Title>
+    <Authors>Pingvinen</Authors>
+    <Company>Runedur</Company>
+    <PackageTags>ORM;Postgres;Timescaledb</PackageTags>
+    <PackageProjectUrl>https://github.com/pingvinen/runedur-orm</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
