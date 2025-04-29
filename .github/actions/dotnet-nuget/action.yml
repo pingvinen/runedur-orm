@@ -1,0 +1,46 @@
+name: dotnet-nuget
+description: Dotnet nuget pack and publish action. Depends on dotnet-setup action.
+
+inputs:
+  target-dir:
+    description: The build target directory
+    required: true
+  do-push:
+    description: Push the package to the nuget feed
+    required: false
+    default: 'true'
+  nuget-feed-access-token:
+    description: the access token for the nuget feed
+    required: false
+    type: string
+    default: ''
+  nuget-feed-uri:
+    description: the nuget feed to use
+    required: false
+    default: 'https://api.nuget.org/v3/index.json'
+    type: string
+
+runs:
+  using: 'composite'
+
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 100
+        fetch-tags: true
+
+    - id: dotnet-build
+      name: Dotnet build
+      run: dotnet build --configuration Release ${{ inputs.target-dir }}
+      shell: bash
+
+    - id: dotnet-pack
+      name: Dotnet pack
+      run: dotnet pack --configuration Release ${{ inputs.target-dir }}
+      shell: bash
+
+    - id: dotnet-publish
+      if: inputs.do-push == 'true'
+      name: Dotnet publish
+      run: dotnet nuget push "${{ inputs.target-dir }}/bin/Release/*.nupkg" --api-key ${{ inputs.nuget-feed-access-token }} --source ${{ inputs.nuget-feed-uri }}
+      shell: bash
