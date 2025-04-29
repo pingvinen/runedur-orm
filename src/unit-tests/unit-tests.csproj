@@ -27,6 +27,11 @@
     </PackageReference>
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <!-- Avoids using the same folders across projects, when building multiple projects at the same time, which leads to deadlocks -->
+    <OutputPath>bin/$(Configuration)/$(MSBuildProjectName)/</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\generator\generator.csproj" />
   </ItemGroup>
