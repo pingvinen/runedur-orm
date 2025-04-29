@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" /> <!-- To fix a build error in CI -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" /> <!-- To fix a build error in CI -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" /> <!-- This seems to be needed by the testing stack - do NOT include in production code -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
